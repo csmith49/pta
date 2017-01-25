@@ -1,5 +1,8 @@
 ### Python Term Algebra (PTA)
 
+## To use
+Just make sure you add this git repo to your PYTHONPATH.
+
 ## Classes
 
 For now, see notes:
