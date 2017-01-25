@@ -72,13 +72,20 @@ class Term(object):
         if len(args) == 1:
             # case 1: made from an sexp
             if isinstance(args[0], (list, tuple)):
-                self.value, *self.children = args[0]
+                # this takes advantage of case 3
+                self.__init__(*args[0])
             # case 2: leaf
             else:
                 self.value, self.children = args[0], []
-        # case 3: node [term]
+        # case 3: node [?]
         else:
-            self.value, *self.children = args
+            self.value, self.children = args[0], []
+            for arg in args[1:]:
+                # the children may not be terms, so let's check
+                if isinstance(arg, Term):
+                    self.children.append(arg)
+                else:
+                    self.children.append(Term(arg))
     # a slew of helper functions
     def is_leaf(self):
         return self.children == []
