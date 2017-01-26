@@ -133,11 +133,11 @@ class Term(object):
     def substitute(self, sub):
         def valuation(term):
             if term.is_leaf():
-                try: term = d[term.value]
+                try: term = sub[term.value]
                 except KeyError: pass
                 return lambda: term
             else:
-                return lambda *kids: Term(*([term.value] + kids))
+                return lambda *kids: Term(*([term.value] + list(kids)))
         return self.cata(valuation)
     # which we also wrap
     def __matmul__(self, sub):

@@ -1,4 +1,4 @@
-from terms import *
+from pta import *
 
 print("<==== Testing positions ====>")
 print("Instance creation: {p}".format(p=Position(1, 2, 3)))
@@ -12,5 +12,11 @@ print("{x} <= {y} <= {z}? {check}".format(x=p1, y=p2, z=p3, check=(p1 < p2 and p
 print("<==== Testing Terms ====>")
 t1 = Term(1)
 t2 = Term('f', 1, 2)
+t3 = Term('g', 'x', 'y')
 print(t1)
 print(t2)
+
+print("<==== Testing Substitutions ====>")
+s = Substitution([('x', Term('y'))])
+print(s)
+print(t3 @ s)
