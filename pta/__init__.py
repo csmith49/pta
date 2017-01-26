@@ -17,7 +17,7 @@ class Position(tuple):
     def head(self):
         return self[0]
     def rest(self):
-        return self[1:]
+        return Position(self[1:])
     # pretty printing and whatnot
     def __str__(self):
         return "<{body}>".format(body=", ".join(map(str, self)))
@@ -25,7 +25,7 @@ class Position(tuple):
         return str(self)
     # and a helper function for manipulation during traversal
     def extend(self, index):
-        return Position([i] + list(self))
+        return Position([index] + list(self))
     def __radd__(self, other):
         return self.extend(other)
     # no need to explicity define an order --- super's is lexicographic, which
