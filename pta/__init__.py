@@ -92,14 +92,10 @@ class Term(object):
     def arity(self):
         return len(self.children)
     # useful recursion and iteration techniques
-    def cata(self, cons):
-        # recursion rules:
-        # 1: leaf.cata(cons) = cons[leaf]
-        # 2: f(x, y, z).cata(cons) = cons[f](x.cata(cons), y.cata(cons), ...)
-        if self.is_leaf():
-            return cons[self.value]
-        else:
-            return cons[self.value](*list(map(lambda t: t.cata(cons), self.children)))
+    def cata(self, valuation):
+        # valuation is a valuation function that tells us what to do on each value
+        children = map(lambda t: t.cata(valuation), self.children)
+        return valuation(self)(*list(children))
     # find all positions that match a predicate
     def filter(self, pred):
         if self.arity == 0:
@@ -135,7 +131,14 @@ class Term(object):
         return self.at_position(pos)
     # and we must be able to apply substitutions
     def substitute(self, sub):
-        return self.cata(sub)
+        def valuation(term):
+            if term.is_leaf():
+                try: term = d[term.value]
+                except KeyError: pass
+                return lambda: term
+            else:
+                return lambda *kids: Term(*([term.value] + kids))
+        return self.cata(valuation)
     # which we also wrap
     def __matmul__(self, sub):
         return self.substitute(sub)
